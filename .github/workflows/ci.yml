@@ -1,0 +1,41 @@
+name: Client CI and Releases
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: client-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - run: python3 scripts/verify.py
+  release:
+    needs: verify
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Publish verified client build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          test -f release/release.json || exit 0
+          tag=$(python3 -c 'import json; print(json.load(open("release/release.json"))["tag"])')
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists; immutable assets retained"
+            exit 0
+          fi
+          gh release create "$tag" release/hitry-slon.mrpack release/release.json \
+            --target "$GITHUB_SHA" --title "Hitry Slon $tag" \
+            --notes 'Импортируйте hitry-slon.mrpack в Modrinth App или Prism Launcher. Версия должна совпадать с сервером.'
