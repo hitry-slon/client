@@ -1,7 +1,7 @@
 {
-  "tag": "v0.1.18-preview",
-  "source_commit": "65a3a40b02a7b6bb12c3e72332bb27277553658f",
-  "sha256": "e216b848a26f83448dc79b3dbaa69cb15a803f9826ad24a51b2b33b37af3a388",
+  "tag": "v0.1.20-preview",
+  "source_commit": "912c32a93167d7025072a63133ed7b0edaaac851",
+  "sha256": "2693f45473c4f047e004f8e2ca13a637ffc93fa37943b212e201df4fd5f0b986",
   "minecraft": "1.21.1",
   "neoforge": "21.1.266",
   "prerelease": true
