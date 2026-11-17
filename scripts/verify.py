@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Verify public release payload before publishing assets."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
 import re
 import zipfile
 
-release = Path('release')
+parser = argparse.ArgumentParser()
+parser.add_argument('--release-dir', type=Path, default=Path('release'))
+release = parser.parse_args().release_dir
 if not release.exists():
     print('No release payload yet; public repository structure valid')
     raise SystemExit(0)
@@ -15,6 +18,8 @@ if not re.fullmatch(r'v\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?', meta['tag']):
     raise ValueError('Invalid release tag')
 if not re.fullmatch(r'[0-9a-f]{40}', meta['source_commit']):
     raise ValueError('Invalid source commit')
+if not isinstance(meta.get('prerelease'), bool) or meta['prerelease'] != ('-' in meta['tag']):
+    raise ValueError('Invalid prerelease flag')
 archive = release / 'hitry-slon.mrpack'
 if hashlib.sha256(archive.read_bytes()).hexdigest() != meta['sha256']:
     raise ValueError('Release archive hash mismatch')
