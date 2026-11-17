@@ -37,6 +37,6 @@ with zipfile.ZipFile(archive) as z:
             raise ValueError('Server-only mod in public client payload')
         if not all(u.startswith('https://cdn.modrinth.com/') for u in f['downloads']):
             raise ValueError('Unexpected download source')
-        if not any(re.fullmatch(r'[0-9a-f]{n}'.replace('{n}', '{'+str(n)+'}'), f['hashes'].get(algo,'')) for algo,n in [('sha256',64),('sha512',128)]):
+        if not any(re.fullmatch(rf'[0-9a-f]{{{n}}}', f['hashes'].get(algo,'')) for algo,n in [('sha256',64),('sha512',128)]):
             raise ValueError('Missing strong hash')
 print('Public release payload verified:', meta['tag'])
