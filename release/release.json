@@ -1,7 +1,7 @@
 {
-  "tag": "v0.1.22",
-  "source_commit": "3804e31904d64111922bd8946eff829c45da72b9",
-  "sha256": "a16fba17253b61790513a479cdc725b6477bad32ce44b28e8cf1a8e9147d088c",
+  "tag": "v0.1.23",
+  "source_commit": "29252536b69bc00a6c3112b56869865584f81c60",
+  "sha256": "d518a3148a475a331d19dd2e6f5eaae63e6de3e4c9edd42cb22bcdf35b861dd7",
   "minecraft": "1.21.1",
   "neoforge": "21.1.266",
   "prerelease": false
